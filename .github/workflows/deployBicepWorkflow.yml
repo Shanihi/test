@@ -1,0 +1,28 @@
+name: Caller workflow deploy Azure resources
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy_dev:
+    name: Deploy to DEV
+    uses: ./.github/workflows/reusableDeployBicepFileWorkflow.yml
+    with:
+      environmentType: dev
+      resourceGroupName: fakeClientDevRG
+    secrets: inherit 
+      
+  deploy_prod:
+    name: Deploy to PROD
+    needs: deploy_dev
+    uses: ./.github/workflows/reusableDeployBicepFileWorkflow.yml
+    with:
+      environmentType: prod
+      resourceGroupName: fakeClientProdRG 
+    secrets: inherit 

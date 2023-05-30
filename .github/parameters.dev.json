@@ -1,0 +1,100 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "appServicePlan": {
+      "value": {
+        "name": "demo-app-service-plan-avanade",
+        "kind": "linux",
+        "sku": {
+          "name": "B1",
+          "tier": "Basic"
+        }
+      }
+    },
+    "webApp": {
+      "value": {
+        "name": "demo-webapp-avanade",
+        "linuxFxVersion": "DOCKER|mcr.microsoft.com/appsvc/staticsite:latest",
+        "dependsOn": [
+          "[resourceId('Microsoft.Web/serverfarms', 'demo-app-service-plan-avanade')]"
+        ]
+      }
+    },
+    "keyVault": {
+      "value": {
+        "name": "testAvanadeKeyVault",
+        "resourceGroup": "myAvanadeACR"
+      }
+    },
+    "sqlServer": {
+      "value": {
+        "name": "demo-server-avanade",
+        "administratorLogin": "logintestavanade",
+        "administratorLoginPassword": {
+          "reference": {
+            "keyVault": {
+              "id": "/subscriptions/f2a939a1-0cba-42d3-a107-63746fc62812/resourceGroups/myAvanadeACR/providers/Microsoft.KeyVault/vaults/testAvanadeKeyVault",
+              "name": "testAvanadeKeyVault",
+              "resourceGroup": "myAvanadeACR"
+            },
+            "secretName": "secretPasswordSql"
+          }
+        },
+        "version": "12.0",
+        "federatedClientId": "",
+        "minimalTlsVersion": "1.2",
+        "primaryUserAssignedIdentityId": "",
+        "publicNetworkAccess": "",
+        "restrictOutboundNetworkAccess": ""
+      }
+    },
+    "sqlDB": {
+      "value": {
+        "name": "demo-database-avanade",
+        "sku": {
+          "name": "Basic",
+          "tier": "Basic",
+          "size": "5120",
+          "capacity": 0,
+          "family": "Gen5"
+        },
+        "autoPauseDelay": -1,
+        "catalogCollation": "SQL_Latin1_General_CP1_CI_AS",
+        "collation": "SQL_Latin1_General_CP1_CI_AS",
+        "createMode": "Default",
+        "elasticPoolId": "",
+        "federatedClientId": "",
+        "highAvailabilityReplicaCount": 0,
+        "isLedgerOn": false,
+        "licenseType": "LicenseIncluded",
+        "longTermRetentionBackupResourceId": "",
+        "maintenanceConfigurationId": "",
+        "maxSizeBytes": 2147483648,
+        "minCapacity": 2,
+        "preferredEnclaveType": "",
+        "readScale": "Disabled",
+        "recoverableDatabaseId": "",
+        "recoveryServicesRecoveryPointId": "",
+        "requestedBackupStorageRedundancy": "Zone",
+        "restorableDroppedDatabaseId": "",
+        "restorePointInTime": "",
+        "sampleName": "AdventureWorksLT",
+        "secondaryType": "",
+        "sourceDatabaseDeletionDate": "",
+        "sourceDatabaseId": "",
+        "sourceResourceId": "",
+        "zoneRedundant": false,
+
+        "firewall": {
+          "name": "demo-firewall-avanade",
+          "startIpAddress": "19.0.0.0",
+          "endIpAddress": "21.0.0.0"
+        },
+        "dependsOn": [
+          "[resourceId('Microsoft.Sql/servers', 'demo-server-avanade')]"
+        ]
+      }
+    }
+  }
+}
