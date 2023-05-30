@@ -1,0 +1,16 @@
+{
+	"moduleAliases": {
+		"br": {
+			"CoreModules": {
+				"registry": "avanadeBicepContainerRegistry.azurecr.io"
+			}
+		}
+	},
+	"cloud": {
+		"currentProfile": "AzureCloud",
+		"credentialPrecedence": [
+			"AzureCLI",
+			"AzurePowerShell"
+		]
+	}
+}
